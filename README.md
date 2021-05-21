@@ -90,3 +90,18 @@ let sub = my_client.subscribe("subscription-name")
 
 When subscribing to a topic, a random subscription name will be generated. To prevent dangling
 subscriptions, you need to explicitly call `subscription.destroy()`.
+
+
+## Reason why I forked initial repository
+
+I wanted to be able to send attributes along with the message to google pub sub
+This would enable ,me to apply specific filter
+
+Here is main change :
+```
+pub struct EncodedMessage {
+    data: String,
+    attributes:HashMap<String,String>
+}
+
+```
