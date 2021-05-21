@@ -1,10 +1,13 @@
 use crate::error;
 use base64;
 use serde_derive::{Deserialize, Serialize};
+use std::collections::HashMap;
+
 
 #[derive(Deserialize, Clone, Serialize)]
 pub struct EncodedMessage {
     data: String,
+    attributes:HashMap<String,String>
 }
 
 pub trait FromPubSubMessage
@@ -19,10 +22,10 @@ impl EncodedMessage {
         base64::decode(&self.data)
     }
 
-    pub fn new<T: serde::Serialize>(data: &T) -> Self {
+    pub fn new<T: serde::Serialize>(data: &T,attributes:&HashMap<String,String>) -> Self {
         let json = serde_json::to_string(data).unwrap();
         let data = base64::encode(&json);
-        EncodedMessage { data }
+        EncodedMessage { data:data,attributes:attributes.to_owned() }
     }
 }
 

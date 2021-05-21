@@ -10,6 +10,7 @@ use rand::{thread_rng, Rng};
 use serde::de::DeserializeOwned;
 use serde_derive::{Deserialize, Serialize};
 use std::env;
+use std::collections::HashMap;
 
 lazy_static! {
     static ref PUBSUB_HOST: String = env::var("PUBSUB_EMULATOR_HOST")
@@ -61,12 +62,13 @@ impl Topic {
     pub async fn publish<T: serde::Serialize>(
         &self,
         data: T,
+        attributes:HashMap<String,String>
     ) -> Result<PublishMessageResponse, error::Error> {
         let uri: hyper::Uri = format!("{}/v1/{}:publish", *PUBSUB_HOST, self.name)
             .parse()
             .unwrap();
 
-        let new_message = EncodedMessage::new(&data);
+        let new_message = EncodedMessage::new(&data,&attributes);
         let payload = PublishMessageRequest {
             messages: vec![new_message],
         };
