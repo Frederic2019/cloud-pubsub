@@ -4,9 +4,10 @@ use serde_derive::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 
-#[derive(Deserialize, Clone, Serialize)]
+#[derive(Serialize, Deserialize,Clone)]
 pub struct EncodedMessage {
     data: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     attributes:Option<HashMap<String,String>>
 }
 
