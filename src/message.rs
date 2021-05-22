@@ -2,12 +2,13 @@ use crate::error;
 use base64;
 use serde_derive::{Deserialize, Serialize};
 use std::collections::HashMap;
-
+use std::default::Default;
 
 #[derive(Serialize, Deserialize,Clone)]
 pub struct EncodedMessage {
     data: String,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     attributes:Option<HashMap<String,String>>
 }
 
