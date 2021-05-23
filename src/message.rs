@@ -7,7 +7,12 @@ use std::default::Default;
 #[derive(Serialize, Deserialize,Clone)]
 pub struct EncodedMessage {
     data: String,
-    attributes:Option<HashMap<String,String>>
+    #[serde(default = "empty_value")]
+    attributes:HashMap<String,String>
+}
+
+fn empty_value() -> HashMap<String,String> {
+    HashMap::default()
 }
 
 pub trait FromPubSubMessage
@@ -25,7 +30,7 @@ impl EncodedMessage {
     pub fn new<T: serde::Serialize>(data: &T,attributes:&HashMap<String,String>) -> Self {
         let json = serde_json::to_string(data).unwrap();
         let data = base64::encode(&json);
-        EncodedMessage { data:data,attributes:Some(attributes.to_owned()) }
+        EncodedMessage { data:data,attributes:attributes.to_owned() }
     }
 }
 
